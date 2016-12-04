@@ -42,7 +42,7 @@ namespace servicedesk.api
                 .SingleOrDefaultAsync(r => r.Id == id);
         }
 
-        public  async Task CreateAsync(TicketCreated created)
+        public async Task CreateAsync(TicketCreated created)
         {
             var ticket = new REQUEST {
                 RequestDate = DateTime.Now,

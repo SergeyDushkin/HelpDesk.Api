@@ -33,5 +33,12 @@ namespace servicedesk.api
 
             return Ok(record);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody]TicketCreated created) 
+        {
+            await this.service.CreateAsync(created);
+            return Accepted();
+        }
     }
 }
