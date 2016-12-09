@@ -52,6 +52,7 @@ namespace servicedesk.api
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
             app.UseMvcWithDefaultRoute();
         }
     }

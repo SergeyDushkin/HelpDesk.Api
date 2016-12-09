@@ -34,7 +34,6 @@ namespace servicedesk.api
             return Ok(record);
         }
 
-        [Route("{id}")]
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]ClientRegistered client)
         {
