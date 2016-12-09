@@ -53,11 +53,17 @@ namespace servicedesk.api
                 Name = r.LOCATION_NAME
             });
         }
-        
+
         public async Task<Client> GetByIdAsync(Guid id)
         {
             this.logger.LogTrace("Get client by Id {0}", id);
-            return await Task.FromResult<Client>(default(Client));
+
+            var typeId = await GetTypeIdAsync();
+            
+            return await this.context.Locations.Where(r => r.LOCATION_TYPE_GUID == typeId).Select(r => new Client {
+                Id = r.GUID_RECORD,
+                Name = r.LOCATION_NAME
+            }).SingleOrDefaultAsync();
         }
 
         private async Task<Guid> GetTypeIdAsync()
