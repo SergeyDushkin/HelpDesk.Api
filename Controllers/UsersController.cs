@@ -17,16 +17,15 @@ namespace servicedesk.api
         [HttpGet, Authorize]
         public async Task<IActionResult> GetByClientId(Guid clientId)
         {
-            var query = this.service.GetByKnipiId(knipiId).Restrict(r => r.knipi_id, User);
-            return await Task.FromResult(Ok(query));
+            var query = await this.service.GetAsync(clientId);
+            return Ok(query);
         }
 
         [Route("{id}")]
         [HttpGet, Authorize]
         public async Task<IActionResult> GetById(Guid clientId, Guid id)
         {
-            var record = await this.service.GetByIdAsync(id);
-            record = record.Restrict(r => r.knipi_id, User);
+            var record = await this.service.GetByIdAsync(clientId, id);
 
             if (record == null)
             {
@@ -38,55 +37,41 @@ namespace servicedesk.api
 
         [Route("{id}")]
         [HttpPut, Authorize]
-        public async Task<IActionResult> Put(Guid clientId, Guid id, [FromBody]directors director)
+        public async Task<IActionResult> Put(Guid clientId, Guid id, [FromBody]User user)
         {
-            var record = await this.service.GetByIdAsync(id);
-            record = record.Restrict(r => r.knipi_id, User);
+            var record = await this.service.GetByIdAsync(clientId, id);
 
             if (record == null)
             {
                 return NotFound();
             }
 
-            director.id = id;
-            director.knipi_id = knipiId;
+            await service.UpdateAsync(user);
 
-            await service.UpdateAsync(director);
-
-            return Ok();
+            return NoContent();
         }
 
         [HttpPost, Authorize]
-        public async Task<IActionResult> Post(Guid clientId, [FromBody]directors director)
+        public async Task<IActionResult> Post(Guid clientId, [FromBody]UserCreated created)
         {
-            director.knipi_id = knipiId;
-            director = director.Restrict(r => r.knipi_id, User);
-
-            if (director == null)
-            {
-                return NotFound();
-            }
-
-            var newDirector = await service.CreateAsync(director);
-
-            return Created(newDirector.id.ToString(), newDirector);
+            var user = await service.CreateAsync(clientId, created);
+            return Created(user.Id.ToString(), user);
         }
 
         [Route("{id}")]
         [HttpDelete, Authorize]
-        public async Task<IActionResult> Delete(Guid knipiId, Guid id)
+        public async Task<IActionResult> Delete(Guid clientId, Guid id)
         {
-            var director = await this.service.GetByIdAsync(id);
-            director = director.Restrict(r => r.knipi_id, User);
+            var deleted = await this.service.GetByIdAsync(clientId, id);
 
-            if (director == null)
+            if (deleted == null)
             {
                 return NotFound();
             }
 
-            await service.DeleteAsync(director);
+            await service.DeleteAsync(deleted);
 
-            return Ok();
+            return NoContent();
         }
     }
 }

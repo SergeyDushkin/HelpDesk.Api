@@ -16,51 +16,85 @@ namespace servicedesk.api
             this.logger = loggerFactory.CreateLogger(GetType().Namespace);
         }
 
-        public async Task<User> CreateAsync(UserCreated reg)
+        public async Task<User> CreateAsync(Guid clientId, UserCreated created)
         {
-            var typeId = await GetTypeIdAsync();
-
-            if (await this.context.Locations.AnyAsync(r => r.LOCATION_TYPE_GUID == typeId && r.LOCATION_NAME == reg.Name))
-            {
-                throw new Exception(String.Format("Client {0} already exists", reg.Name));
-            }
-
-            var client = new LOCATION {
-                LOCATION_NAME = reg.Name,
-                LOCATION_TYPE_GUID = typeId
+            var user = new USER {
+                LOCATION_GUID = clientId,
+                FIRST_NAME = created.Name
             };
 
-            await this.context.Locations.AddAsync(client);
+            await this.context.Users.AddAsync(user);
             await this.context.SaveChangesAsync();
             
-            this.logger.LogTrace("Register new client. Name : {0}", reg.Name);
+            this.logger.LogInformation("Register new user. Name : {0}", created.Name);
             
             return new User {
-                Id = client.GUID_RECORD,
-                Name = client.LOCATION_NAME
+                Id = user.GUID_RECORD,
+                Name = user.FIRST_NAME
             };
         }
 
-        public async Task<IQueryable<User>> GetAsync()
+        public async Task<IQueryable<User>> GetAsync(Guid clientId)
         {
-            this.logger.LogTrace("Get clients");
+            await Task.FromResult(0);
 
-            var typeId = await GetTypeIdAsync();
-            
-            return this.context.Locations.Where(r => r.LOCATION_TYPE_GUID == typeId).Select(r => new User {
-                Id = r.GUID_RECORD,
-                Name = r.LOCATION_NAME
-            });
+            this.logger.LogInformation("Get users");
+
+            return this.context.Users
+                .Where(r => r.LOCATION_GUID == clientId)
+                .Select(r => new User {
+                    Id = r.GUID_RECORD,
+                    Name = r.FIRST_NAME
+                });
         }
 
         public async Task<User> GetByIdAsync(Guid clientId, Guid id)
         {
-            this.logger.LogTrace("Get client by Id {0}", id);
+            this.logger.LogInformation("Get user by Id {0}", id);
 
-            return await this.context.Locations.Where(r => r.LOCATION_TYPE_GUID == typeId).Select(r => new User {
-                Id = r.GUID_RECORD,
-                Name = r.LOCATION_NAME
-            }).SingleOrDefaultAsync();
+            return await this.context.Users
+                .Where(r => r.LOCATION_GUID == clientId)
+                .Select(r => new User {
+                    Id = r.GUID_RECORD,
+                    Name = r.FIRST_NAME
+                })
+                .SingleOrDefaultAsync();
+        }
+
+        public async Task<User> DeleteAsync(Guid clientId, Guid id)
+        {
+            this.logger.LogInformation("Get user by Id {0}", id);
+
+            return await this.context.Users
+                .Where(r => r.LOCATION_GUID == clientId)
+                .Select(r => new User {
+                    Id = r.GUID_RECORD,
+                    Name = r.FIRST_NAME
+                })
+                .SingleOrDefaultAsync();
+        }
+
+        public async Task UpdateAsync(User user)
+        {
+            var updated = new USER 
+            {
+                GUID_RECORD = user.Id,
+                FIRST_NAME = user.Name
+            };
+
+            this.context.Users.Update(updated);
+            await this.context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(User user)
+        {
+            var deleted = new USER 
+            {
+                GUID_RECORD = user.Id
+            };
+
+            this.context.Users.Remove(deleted);
+            await this.context.SaveChangesAsync();
         }
     }
 }
