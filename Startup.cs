@@ -28,7 +28,7 @@ namespace servicedesk.api
         {
             services.AddDbContext<HelpDeskDbContext>(options => options.UseSqlServer(_configuration.GetConnectionString("HelpDeskDatabase")));
             services.AddScoped<TicketService>();
-            //services.AddScoped<DirectorService>();
+            services.AddScoped<ClientService>();
 
             services.AddCors(x => x.AddPolicy("corsGlobalPolicy", policy => {
                 policy.AllowAnyHeader();
