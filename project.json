@@ -22,7 +22,8 @@
     "Microsoft.Extensions.Logging.Debug": "1.1.0",
     "Microsoft.AspNetCore.Authentication.JwtBearer": "1.1.0"
   },
-"frameworks": {
+  
+  "frameworks": {
     "netcoreapp1.1": {
       "dependencies": {
         "Microsoft.NETCore.App": {
@@ -32,5 +33,22 @@
       },
       "imports": "dnxcore50"
     }
+  },
+
+  "publishOptions": {
+      "include": [
+          "appsettings.json",
+          "web.config",
+          "nlog.config",
+          "IdentityHelpDesk.cer"
+      ]
+  }, 
+
+  "tools": {
+    "Microsoft.AspNetCore.Server.IISIntegration.Tools": "1.1.0-preview4-final"
+  },
+
+  "scripts": {
+      "postpublish": [ "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%" ]
   }
 }
