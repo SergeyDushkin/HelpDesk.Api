@@ -59,7 +59,7 @@ namespace servicedesk.api
 
             var typeId = await GetTypeIdAsync();
             
-            return await this.context.Locations.Where(r => r.LOCATION_TYPE_GUID == typeId).Select(r => new Client {
+            return await this.context.Locations.Where(r => r.LOCATION_TYPE_GUID == typeId && r.GUID_RECORD == id).Select(r => new Client {
                 Id = r.GUID_RECORD,
                 Name = r.LOCATION_NAME
             }).SingleOrDefaultAsync();
