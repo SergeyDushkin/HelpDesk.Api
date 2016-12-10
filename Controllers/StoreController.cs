@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace servicedesk.api
 {
-    [Route("api/v1/[controller]")]
+    [Route("[controller]")]
     public class StoreController : ControllerBase
     {
         private readonly HelpDeskDbContext context;

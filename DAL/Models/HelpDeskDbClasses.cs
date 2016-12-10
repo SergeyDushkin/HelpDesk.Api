@@ -183,9 +183,8 @@ namespace servicedesk.api
     }
 
     [Table("WH_CONTACT_INFO")]
-    public class LOCATION_CONTACT_INFO
+    public class LOCATION_CONTACT_INFO : DbClass
     {
-        [Key]
         [ForeignKey("LOCATION")]
         public Guid REFERENCE_GUID { get; set; }
 

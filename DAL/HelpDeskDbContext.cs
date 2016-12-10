@@ -36,6 +36,7 @@ namespace servicedesk.api
 
         public DbSet<LOCATION> Locations { get; set; }
         public DbSet<LOCATION_TYPE> LocationTypes { get; set; }
+        public DbSet<LOCATION_CONTACT_INFO> LocationContacts { get; set; }
         public DbSet<BRAND> Brands { get; set; }
         public DbSet<USER> Users { get; set; }
         public DbSet<ROLE> Roles { get; set; }

@@ -4,7 +4,7 @@ using System;
 
 namespace servicedesk.api
 {
-    [Route("api/v1/[controller]")]
+    [Route("[controller]")]
     public class ClientsController : ControllerBase
     {
         private readonly ClientService service;
