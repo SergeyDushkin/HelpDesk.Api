@@ -10,6 +10,6 @@ namespace servicedesk.api
 
     public class AddressCreated 
     {
-        public string Address { get; set; }
+        public string Name { get; set; }
     }
 }

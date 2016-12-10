@@ -20,13 +20,13 @@ namespace servicedesk.api
         {
             var address = new LOCATION_CONTACT_INFO {
                 REFERENCE_GUID = clientId,
-                ADDRESS = created.Address
+                ADDRESS = created.Name
             };
 
             await this.context.AddAsync(address);
             await this.context.SaveChangesAsync();
             
-            this.logger.LogInformation("Register new address. Name : {0}", created.Address);
+            this.logger.LogInformation("Register new address. Name : {0}", created.Name);
             
             return new Address {
                 Id = address.GUID_RECORD,
