@@ -20,7 +20,9 @@
     "Microsoft.Extensions.Configuration.Json": "1.1.0",
     "Microsoft.Extensions.Logging.Console": "1.1.0",
     "Microsoft.Extensions.Logging.Debug": "1.1.0",
-    "Microsoft.AspNetCore.Authentication.JwtBearer": "1.1.0"
+    "Microsoft.AspNetCore.Authentication.JwtBearer": "1.1.0",
+    "NLog.Extensions.Logging": "1.0.0-*",
+    "NLog.Web.AspNetCore": "4.2.4"
   },
   
   "frameworks": {

@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using NLog.Extensions.Logging;
+using NLog.Web;
 
 namespace servicedesk.api
 {
@@ -58,6 +60,12 @@ namespace servicedesk.api
 
             app.UseCors("corsGlobalPolicy");
 
+            //add NLog to ASP.NET Core
+            loggerFactory.AddNLog();
+
+            //add NLog.Web
+            app.AddNLogWeb();
+
             loggerFactory.AddConsole(LogLevel.Debug);
             loggerFactory.AddDebug();
             
@@ -85,6 +93,8 @@ namespace servicedesk.api
                    ClockSkew = TimeSpan.Zero 
                 }
             });
+
+            env.ConfigureNLog("nlog.config");
 
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
             app.UseMvcWithDefaultRoute();
