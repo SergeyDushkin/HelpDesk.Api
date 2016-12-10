@@ -75,11 +75,12 @@ namespace servicedesk.api
                 .SingleOrDefaultAsync();
         }
 
-        public async Task UpdateAsync(User user)
+        public async Task UpdateAsync(Guid clientId, User user)
         {
             var updated = new USER 
             {
                 GUID_RECORD = user.Id,
+                LOCATION_GUID = clientId,
                 FIRST_NAME = user.Name
             };
 

@@ -46,7 +46,7 @@ namespace servicedesk.api
                 return NotFound();
             }
 
-            await service.UpdateAsync(address);
+            await service.UpdateAsync(clientId, address);
 
             return NoContent();
         }

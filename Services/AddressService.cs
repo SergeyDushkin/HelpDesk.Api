@@ -75,11 +75,12 @@ namespace servicedesk.api
                 .SingleOrDefaultAsync();
         }
 
-        public async Task UpdateAsync(Address address)
+        public async Task UpdateAsync(Guid clientId, Address address)
         {
             var updated = new LOCATION_CONTACT_INFO 
             {
                 GUID_RECORD = address.Id,
+                REFERENCE_GUID = clientId,
                 ADDRESS = address.Name
             };
 
