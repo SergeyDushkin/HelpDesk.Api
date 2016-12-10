@@ -54,6 +54,7 @@ namespace servicedesk.api
 
             return await this.context.Users
                 .Where(r => r.LOCATION_GUID == clientId)
+                .Where(r => r.GUID_RECORD == id)
                 .Select(r => new User {
                     Id = r.GUID_RECORD,
                     Name = r.FIRST_NAME

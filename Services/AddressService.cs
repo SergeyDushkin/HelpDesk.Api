@@ -54,6 +54,7 @@ namespace servicedesk.api
 
             return await this.context.LocationContacts
                 .Where(r => r.REFERENCE_GUID == clientId)
+                .Where(r => r.GUID_RECORD == id)
                 .Select(r => new Address {
                     Id = r.GUID_RECORD,
                     Name = r.ADDRESS
