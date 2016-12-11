@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -14,24 +15,6 @@ namespace servicedesk.api
         {
             this.context = context;
             this.logger = loggerFactory.CreateLogger(GetType().Namespace);
-        }
-
-        public async Task<User> CreateAsync(Guid clientId, UserCreated created)
-        {
-            var user = new USER {
-                LOCATION_GUID = clientId,
-                FIRST_NAME = created.Name
-            };
-
-            await this.context.Users.AddAsync(user);
-            await this.context.SaveChangesAsync();
-            
-            this.logger.LogInformation("Register new user. Name : {0}", created.Name);
-            
-            return new User {
-                Id = user.GUID_RECORD,
-                Name = user.FIRST_NAME
-            };
         }
 
         public async Task<IQueryable<User>> GetAsync(Guid clientId)
@@ -75,7 +58,25 @@ namespace servicedesk.api
                 .SingleOrDefaultAsync();
         }
 
-        public async Task UpdateAsync(Guid clientId, User user)
+        public async Task<User> CreateAsync(Guid clientId, UserCreated created, IIdentity identity)
+        {
+            var user = new USER {
+                LOCATION_GUID = clientId,
+                FIRST_NAME = created.Name
+            };
+
+            await this.context.Users.AddAsync(user);
+            await this.context.SaveChangesAsync();
+            
+            this.logger.LogInformation("Register new user. Name : {0}", created.Name);
+            
+            return new User {
+                Id = user.GUID_RECORD,
+                Name = user.FIRST_NAME
+            };
+        }
+
+        public async Task UpdateAsync(Guid clientId, User user, IIdentity identit)
         {
             var updated = new USER 
             {

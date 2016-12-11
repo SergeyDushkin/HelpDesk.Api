@@ -37,7 +37,7 @@ namespace servicedesk.api
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]TicketCreated created) 
         {
-            await this.service.CreateAsync(created);
+            await this.service.CreateAsync(created, User.Identity);
             return Accepted();
         }
     }
