@@ -67,7 +67,8 @@ namespace servicedesk.api
                 STORE_GUID = created.AddressId,
                 USER_GUID = created.UserId,
                 Comments = created.Description,
-                USERCREATE = identity.Name
+                USERCREATE = identity.Name,
+                USERUPDATE = identity.Name
             };
 
             await this.context.Requests.AddAsync(ticket);
