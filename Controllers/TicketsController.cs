@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using System;
 using Microsoft.AspNetCore.Authorization;
-using System.Linq;
 using System.Security.Claims;
 
 namespace servicedesk.api
