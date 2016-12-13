@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using System;
+using Microsoft.AspNetCore.Authorization;
+using System.Linq;
+using System.Security.Claims;
 
 namespace servicedesk.api
 {
-    [Route("[controller]")]
+    [Route("[controller]"), Authorize]
     public class TicketsController : ControllerBase
     {
         private readonly TicketService service;
@@ -37,7 +40,7 @@ namespace servicedesk.api
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]TicketCreated created) 
         {
-            await this.service.CreateAsync(created, User.Identity);
+            await this.service.CreateAsync(created, (ClaimsIdentity)User.Identity);
             return Accepted();
         }
     }

@@ -46,6 +46,7 @@ namespace servicedesk.api
                 policy.AllowCredentials();
             }));
             
+            services.AddAuthentication();
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("user", policy => policy.RequireClaim("role", "OPERATOR"));
@@ -66,6 +67,8 @@ namespace servicedesk.api
             //add NLog.Web
             app.AddNLogWeb();
 
+            env.ConfigureNLog("nlog.config");
+
             loggerFactory.AddConsole(LogLevel.Debug);
             loggerFactory.AddDebug();
             
@@ -77,7 +80,7 @@ namespace servicedesk.api
             var cert = new X509Certificate2(Path.Combine(_environment.ContentRootPath, 
                 _configuration.GetSection("Authentication:Certificate").Value), _configuration.GetSection("Authentication:CertificatePassword").Value);
 
-            app.UseJwtBearerAuthentication(new JwtBearerOptions
+            var options = new JwtBearerOptions
             {
                 Authority = _configuration.GetSection("Authentication:Authority").Value,
                 Audience = _configuration.GetSection("Authentication:Audience").Value,
@@ -92,12 +95,11 @@ namespace servicedesk.api
                    ValidateLifetime = true, 
                    ClockSkew = TimeSpan.Zero 
                 }
-            });
+            };
 
-            env.ConfigureNLog("nlog.config");
-
+            app.UseJwtBearerAuthentication(options);
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
-            app.UseMvcWithDefaultRoute();
+            app.UseMvc();
         }
     }
 }

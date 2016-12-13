@@ -1,19 +1,23 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Principal;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace servicedesk.api
 {
     public class TicketService
     {
+        protected ILogger logger { get; }
         private readonly HelpDeskDbContext context;
-        public TicketService(HelpDeskDbContext context)
+        public TicketService(HelpDeskDbContext context, ILoggerFactory loggerFactory)
         {
             this.context = context;
             context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            
+            this.logger = loggerFactory.CreateLogger(GetType().Namespace);
         }
 
         public async Task<IEnumerable<Ticket>> GetAsync()
@@ -59,16 +63,18 @@ namespace servicedesk.api
                 .SingleOrDefaultAsync(r => r.Id == id);
         }
 
-        public async Task CreateAsync(TicketCreated created, IIdentity identity)
+        public async Task CreateAsync(TicketCreated created, ClaimsIdentity identity)
         {
+            this.logger.LogTrace("Create new ticket by {0}", identity.FindFirst("name").Value);
+
             var ticket = new REQUEST {
                 RequestDate = DateTime.Now,
                 COMPANY_GUID = created.ClientId,
                 STORE_GUID = created.AddressId,
                 USER_GUID = created.UserId,
                 Comments = created.Description,
-                USERCREATE = identity.Name,
-                USERUPDATE = identity.Name
+                USERCREATE = identity.FindFirst("name").Value,
+                USERUPDATE = identity.FindFirst("name").Value
             };
 
             await this.context.Requests.AddAsync(ticket);
