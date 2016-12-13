@@ -42,8 +42,8 @@ public class ErrorHandlingMiddleware
         {
             error = new
             {
-                message = exception.Message,
-                exception = exception.GetType().Name
+                message = exception.GetBaseException().Message,
+                exception = exception.GetBaseException().GetType().Name
             }
         })).ConfigureAwait(false);
     }
