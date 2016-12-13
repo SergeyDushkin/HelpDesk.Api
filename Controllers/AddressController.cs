@@ -46,9 +46,9 @@ namespace servicedesk.api
                 return NotFound();
             }
 
-            await service.UpdateAsync(clientId, address);
-
-            return NoContent();
+            throw new NotImplementedException();
+            //await service.UpdateAsync(clientId, address);
+            //return NoContent();
         }
 
         [HttpPost, Authorize]

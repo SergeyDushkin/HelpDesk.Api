@@ -10,8 +10,6 @@ namespace servicedesk.api
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-
             // add this:
             modelBuilder.Entity<LOCATION>().Property(p => p.GUID_RECORD).ValueGeneratedOnAdd();
             modelBuilder.Entity<LOCATION_TYPE>().Property(p => p.GUID_RECORD).ValueGeneratedOnAdd();
@@ -32,6 +30,14 @@ namespace servicedesk.api
             modelBuilder.Entity<REMINDER_MESSAGES>().Property(p => p.GUID_RECORD).ValueGeneratedOnAdd();
             modelBuilder.Entity<TEMPLATE>().Property(p => p.GUID_RECORD).ValueGeneratedOnAdd();
             modelBuilder.Entity<USER_CONTACT>().Property(p => p.GUID_RECORD).ValueGeneratedOnAdd();
+            modelBuilder.Entity<LOCATION_CONTACT_INFO>().Property(p => p.GUID_RECORD).ValueGeneratedOnAdd();
+            
+            modelBuilder.Entity<LOCATION>()
+                .HasOne(p => p.CONTACT)
+                .WithOne(i => i.REFERENCE)
+                .HasForeignKey<LOCATION_CONTACT_INFO>(b => b.REFERENCE_GUID);
+
+            base.OnModelCreating(modelBuilder);
         }
 
         public DbSet<LOCATION> Locations { get; set; }
