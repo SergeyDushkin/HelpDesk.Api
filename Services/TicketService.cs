@@ -33,7 +33,11 @@ namespace servicedesk.api
                     UserId = r.USER_GUID,
 
                     Client = new Client { Id = r.COMPANY_GUID, Name = r.COMPANY.LOCATION_NAME },
-                    Address = new Address { Id = r.STORE_GUID, Name = r.STORE.LOCATION_NAME },
+                    Address = new Address { 
+                        Id = r.STORE_GUID, 
+                        Name = r.STORE.LOCATION_NAME, 
+                        Contact = new Contact { Address = r.STORE.CONTACT.ADDRESS } 
+                    },
                     User = new User { Id = r.USER_GUID, Name = r.USER.FIRST_NAME },
 
                     RequestDate = r.RequestDate,
@@ -54,7 +58,11 @@ namespace servicedesk.api
                     UserId = r.USER_GUID,
 
                     Client = new Client { Id = r.COMPANY_GUID, Name = r.COMPANY.LOCATION_NAME },
-                    Address = new Address { Id = r.STORE_GUID, Name = r.STORE.LOCATION_NAME },
+                    Address = new Address { 
+                        Id = r.STORE_GUID, 
+                        Name = r.STORE.LOCATION_NAME, 
+                        Contact = new Contact { Address = r.STORE.CONTACT.ADDRESS } 
+                    },
                     User = new User { Id = r.USER_GUID, Name = r.USER.FIRST_NAME },
 
                     RequestDate = r.RequestDate,
