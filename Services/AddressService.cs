@@ -66,29 +66,6 @@ namespace servicedesk.api
                 transaction.Rollback();
                 throw new Exception("DbException", ex);
             }
-
-            //address.CONTACT = new LOCATION_CONTACT_INFO {
-            //    ADDRESS = created.Address
-            //};
-
-            //var contact = new LOCATION_CONTACT_INFO {
-            //    ADDRESS = created.Address, 
-            //    REFERENCE = new LOCATION {
-            //        LOCATION_NAME = created.Name,
-            //        LOCATION_TYPE_GUID = typeId,
-            //        LOCATION_OWNER_GUID = clientId
-            //    }
-            //};
-
-            //await this.context.LocationContacts.AddAsync(contact);
-
-            //return new Address {
-            //    Id = contact.REFERENCE_GUID,
-            //    Name = contact.REFERENCE.LOCATION_NAME,
-            //    Contact = new Contact {
-            //        Address = contact.ADDRESS
-            //    }
-            //};
         }
 
         public async Task<IQueryable<Address>> GetAsync(Guid clientId)
