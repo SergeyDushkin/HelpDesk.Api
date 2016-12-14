@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Security.Principal;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -58,7 +57,7 @@ namespace servicedesk.api
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<User> CreateAsync(Guid clientId, UserCreated created, IIdentity identity)
+        public async Task<User> CreateAsync(Guid clientId, UserCreated created)
         {
             var user = new USER {
                 LOCATION_GUID = clientId,
@@ -76,7 +75,7 @@ namespace servicedesk.api
             };
         }
 
-        public async Task UpdateAsync(Guid clientId, User user, IIdentity identit)
+        public async Task UpdateAsync(Guid clientId, User user)
         {
             var updated = new USER 
             {

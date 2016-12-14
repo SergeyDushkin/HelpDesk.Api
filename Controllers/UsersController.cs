@@ -46,7 +46,7 @@ namespace servicedesk.api
                 return NotFound();
             }
 
-            await service.UpdateAsync(clientId, user, User.Identity);
+            await service.UpdateAsync(clientId, user);
 
             return NoContent();
         }
@@ -54,7 +54,7 @@ namespace servicedesk.api
         [HttpPost, Authorize]
         public async Task<IActionResult> Post(Guid clientId, [FromBody]UserCreated created)
         {
-            var user = await service.CreateAsync(clientId, created, User.Identity);
+            var user = await service.CreateAsync(clientId, created);
             return Created(user.Id.ToString(), user);
         }
 
