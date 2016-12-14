@@ -30,12 +30,11 @@ namespace servicedesk.api
             modelBuilder.Entity<REMINDER_MESSAGES>().Property(p => p.GUID_RECORD).ValueGeneratedOnAdd();
             modelBuilder.Entity<TEMPLATE>().Property(p => p.GUID_RECORD).ValueGeneratedOnAdd();
             modelBuilder.Entity<USER_CONTACT>().Property(p => p.GUID_RECORD).ValueGeneratedOnAdd();
-            modelBuilder.Entity<LOCATION_CONTACT_INFO>().Property(p => p.GUID_RECORD).ValueGeneratedOnAdd();
             
-            modelBuilder.Entity<LOCATION>()
-                .HasOne(p => p.CONTACT)
-                .WithOne(i => i.REFERENCE)
-                .HasForeignKey<LOCATION_CONTACT_INFO>(b => b.REFERENCE_GUID);
+            //modelBuilder.Entity<LOCATION>()
+            //    .HasOne(p => p.CONTACT)
+            //    .WithOne(i => i.REFERENCE)
+            //    .HasForeignKey<LOCATION_CONTACT_INFO>(b => b.REFERENCE_GUID);
 
             base.OnModelCreating(modelBuilder);
         }

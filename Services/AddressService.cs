@@ -25,15 +25,51 @@ namespace servicedesk.api
                 throw new Exception(String.Format("Address {0} already exists", created.Name));
             }
 
-            var address = new LOCATION {
-                LOCATION_NAME = created.Name,
-                LOCATION_TYPE_GUID = typeId,
-                LOCATION_OWNER_GUID = clientId
-            };
+            var transaction = this.context.Database.BeginTransaction();
 
-            address.CONTACT = new LOCATION_CONTACT_INFO {
-                ADDRESS = created.Address
-            };
+            try
+            {         
+                var address = new LOCATION {
+                    LOCATION_NAME = created.Name,
+                    LOCATION_TYPE_GUID = typeId,
+                    LOCATION_OWNER_GUID = clientId,
+                    CONTACT = new LOCATION_CONTACT_INFO {
+                        ADDRESS = created.Address
+                    }
+                };
+
+                await this.context.AddAsync(address);
+                await this.context.SaveChangesAsync();
+
+                var contact = new LOCATION_CONTACT_INFO {
+                    REFERENCE_GUID = address.GUID_RECORD,
+                    ADDRESS = created.Address, 
+                };
+
+                await this.context.AddAsync(contact);
+                await this.context.SaveChangesAsync();
+
+                transaction.Commit();
+
+                this.logger.LogInformation("Register new address. Name : {0}", created.Name);
+                
+                return new Address {
+                    Id = address.GUID_RECORD,
+                    Name = address.LOCATION_NAME,
+                    Contact = new Contact {
+                        Address = address.CONTACT.ADDRESS
+                    }
+                };
+
+            } catch(Exception ex) 
+            {
+                transaction.Rollback();
+                throw new Exception("DbException", ex);
+            }
+
+            //address.CONTACT = new LOCATION_CONTACT_INFO {
+            //    ADDRESS = created.Address
+            //};
 
             //var contact = new LOCATION_CONTACT_INFO {
             //    ADDRESS = created.Address, 
@@ -44,19 +80,7 @@ namespace servicedesk.api
             //    }
             //};
 
-            await this.context.Locations.AddAsync(address);
             //await this.context.LocationContacts.AddAsync(contact);
-            await this.context.SaveChangesAsync();
-            
-            this.logger.LogInformation("Register new address. Name : {0}", created.Name);
-            
-            return new Address {
-                Id = address.GUID_RECORD,
-                Name = address.LOCATION_NAME,
-                Contact = new Contact {
-                    Address = address.CONTACT.ADDRESS
-                }
-            };
 
             //return new Address {
             //    Id = contact.REFERENCE_GUID,

@@ -102,6 +102,7 @@ namespace servicedesk.api
         [ForeignKey("GUID_RECORD")]
         public virtual LOCATION_SYNC_CODE SYNC { get; set; }
 
+        [ForeignKey("GUID_RECORD")]
         public virtual LOCATION_CONTACT_INFO CONTACT { get; set; }
 
         public string GetEmail()
@@ -182,8 +183,10 @@ namespace servicedesk.api
     }
 
     [Table("WH_CONTACT_INFO")]
-    public class LOCATION_CONTACT_INFO : DbClass
+    public class LOCATION_CONTACT_INFO //: DbClass
     {
+        [Key]
+        [ForeignKey("LOCATION")]
         public Guid REFERENCE_GUID { get; set; }
         public string ADDRESS { get; set; }
         public string EMAIL { get; set; }
@@ -192,7 +195,7 @@ namespace servicedesk.api
         public string FAX { get; set; }
         public string LATITUDE { get; set; }
         public string LONGITUDE { get; set; }
-        public virtual LOCATION REFERENCE { get; set; }
+        public virtual LOCATION LOCATION { get; set; }
     }
 
     [Table("WH_LOCATION_TYPES")]
