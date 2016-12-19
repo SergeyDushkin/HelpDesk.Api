@@ -33,6 +33,7 @@ namespace servicedesk.api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<HelpDeskDbContext>(options => options.UseSqlServer(_configuration.GetConnectionString("HelpDeskDatabase")));
+            services.AddDbContext<ContentDbContext>(options => options.UseSqlServer(_configuration.GetConnectionString("ContentDatabase")));
 
             services.AddScoped<TicketService>();
             services.AddScoped<ClientService>();
@@ -40,6 +41,7 @@ namespace servicedesk.api
             services.AddScoped<AddressService>();
             services.AddScoped<SupplierService>();
             services.AddScoped<JobService>();
+            services.AddScoped<ContentService>();
 
             services.AddCors(x => x.AddPolicy("corsGlobalPolicy", policy => {
                 policy.AllowAnyHeader();
