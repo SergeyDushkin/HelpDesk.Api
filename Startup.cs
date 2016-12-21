@@ -42,6 +42,7 @@ namespace servicedesk.api
             services.AddScoped<SupplierService>();
             services.AddScoped<JobService>();
             services.AddScoped<ContentService>();
+            services.AddScoped<ServiceService>();
 
             services.AddCors(x => x.AddPolicy("corsGlobalPolicy", policy => {
                 policy.AllowAnyHeader();
