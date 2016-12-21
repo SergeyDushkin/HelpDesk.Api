@@ -53,15 +53,14 @@ namespace servicedesk.api
         }
 
         [HttpPost, Authorize]
-        public async Task<IActionResult> Post(Guid ticketId, ICollection<IFormFile> files)
+        public async Task<IActionResult> Post(Guid ticketId, ICollection<IFormFile> file)
         {
-            foreach(var f in files)
+            foreach(var f in file)
             {
                 using (var memoryStream = new MemoryStream())
                 {
                     await f.CopyToAsync(memoryStream);
-
-                    var file = new ContentDbContext.File 
+                    await service.CreateAsync(ticketId, new ContentDbContext.File 
                     {
                         ReferenceId = ticketId,
                         Name  = f.FileName,
@@ -69,9 +68,7 @@ namespace servicedesk.api
                         ContentType = f.ContentType,
                         Size = f.Length,
                         Content = memoryStream.ToArray()
-                    };
-
-                    await service.CreateAsync(ticketId, file);
+                    });
                 }
             }
             
