@@ -101,8 +101,11 @@ namespace servicedesk.api
                 }
             };
 
-            app.UseJwtBearerAuthentication(options);
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
+            app.UseSecureLinkMiddleware();
+
+            app.UseJwtBearerAuthentication(options);
+
             app.UseMvc();
         }
     }
