@@ -11,6 +11,11 @@ using Microsoft.IdentityModel.Tokens;
 using NLog.Extensions.Logging;
 using NLog.Web;
 
+using RawRabbit.Attributes;
+using RawRabbit.Common;
+using RawRabbit.Extensions.Client;
+using RawRabbit.vNext.Logging;
+
 namespace servicedesk.api
 {
     public class Startup
@@ -56,6 +61,14 @@ namespace servicedesk.api
             {
                 options.AddPolicy("user", policy => policy.RequireClaim("role", "OPERATOR"));
             });
+
+            
+			services
+				.AddRawRabbit(
+					_configuration.GetSection("RawRabbit"),
+					ioc => ioc
+						.AddSingleton(LoggingFactory.ApplicationLogger))
+						.AddSingleton<IConfigurationEvaluator, AttributeConfigEvaluator>();
 
             services.AddMvc();
         }

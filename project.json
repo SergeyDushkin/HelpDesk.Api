@@ -22,7 +22,12 @@
     "Microsoft.Extensions.Logging.Debug": "1.1.0",
     "Microsoft.AspNetCore.Authentication.JwtBearer": "1.1.0",
     "NLog.Extensions.Logging": "1.0.0-*",
-    "NLog.Web.AspNetCore": "4.2.4"
+    "NLog.Web.AspNetCore": "4.2.4",
+
+		"RawRabbit": "1.10.3",
+		"RawRabbit.Extensions": "1.10.3",
+		"RawRabbit.Attributes": "1.10.3",
+		"RawRabbit.vNext": "1.10.3"
   },
   
   "frameworks": {
