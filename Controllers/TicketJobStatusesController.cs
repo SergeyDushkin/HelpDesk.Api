@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using System;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using RawRabbit;
-using RawRabbit.Attributes;
+using servicedesk.Common.Commands;
+using RawRabbit.Configuration.Exchange;
 
 namespace servicedesk.api
 {
@@ -31,26 +31,14 @@ namespace servicedesk.api
         [HttpPost]
         public async Task<IActionResult> Post(Guid ticketId, Guid jobId, [FromBody]SetStatus command)
         {
-            command.UserId = "sadushkin";
-            command.SourceId = Guid.Empty;
+            command.Request = Coolector.Common.Commands.Request.New<SetStatus>();           
             command.ReferenceId = jobId;
 
-            await _busClient.PublishAsync(command, Guid.NewGuid());
-                //(configuration) => configuration.WithExchange((exchange) => exchange.WithName("servicedesk.statusmanagementsystem.commands")));
-            
+            await _busClient.PublishAsync(command, Guid.NewGuid(), cfg => cfg
+                .WithExchange(exchange => exchange.WithType(ExchangeType.Topic).WithName("servicedesk.statusmanagementsystem.commands"))
+                .WithRoutingKey("setstatus.job"));
+
             return await Task.FromResult(Accepted(command));
         }
-    }
-    
-    [Exchange(Type = RawRabbit.Configuration.Exchange.ExchangeType.Topic, Name = "servicedesk.statusmanagementsystem.commands")]
-	[Queue(Name = "servicedesk.StatusManagementSystem/SetStatus_helpdesk_statusmanagementsystem", Durable = false)]
-	[Routing(RoutingKey = "setstatus.job")]
-    public class SetStatus
-    {
-        public Guid SourceId { get; set; }
-        public Guid ReferenceId { get; set; }
-        public Guid StatusId { get; set; }
-        public string UserId { get; set; }
-        public string Message { get; set; }
     }
 }

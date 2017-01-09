@@ -27,7 +27,10 @@
 		"RawRabbit": "1.10.3",
 		"RawRabbit.Extensions": "1.10.3",
 		"RawRabbit.Attributes": "1.10.3",
-		"RawRabbit.vNext": "1.10.3"
+		"RawRabbit.vNext": "1.10.3",
+    
+    "NETStandard.Library": "1.6.1",
+    "ServiceDesk.Common": "1.0.1"
   },
   
   "frameworks": {
