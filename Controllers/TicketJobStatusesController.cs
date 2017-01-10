@@ -19,14 +19,23 @@ namespace servicedesk.api
             _logger = loggerFactory.CreateLogger<TicketJobStatusesController>();
         }
 
-        /*
-        [HttpGet, Authorize]
-        public async Task<IActionResult> Get(Guid ticketId)
+        [HttpGet] //Authorize
+        public async Task<IActionResult> Get(Guid ticketId, Guid jobId)
         {
-            var query = await this.service.GetAsync(ticketId);
-            return Ok(query);
+            var client = new StatusManagerClient("http://localhost:10010");
+            var result = await client.GetCurrentStatusAsync("job", jobId);
+
+            return Ok(result);
         }
-        */
+
+        [HttpGet, Route("next")] //Authorize
+        public async Task<IActionResult> GetNext(Guid ticketId, Guid jobId)
+        {
+            var client = new StatusManagerClient("http://localhost:10010");
+            var result = await client.GetNextStatusAsync("job", jobId);
+
+            return Ok(result);
+        }
 
         [HttpPost]
         public async Task<IActionResult> Post(Guid ticketId, Guid jobId, [FromBody]SetStatus command)
