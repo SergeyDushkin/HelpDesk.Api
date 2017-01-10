@@ -47,7 +47,7 @@ namespace servicedesk.api
             command.SourceId = new Guid("b29bdb1f-485d-4721-b905-e8b1f918739a");
             command.Message = "Manual change status";
             command.StatusId = body.StatusId;
-            command.UserId = User.Identity.Name;
+            command.UserId = User.Identity.Name ?? "unauthenticated user";
 
             await _busClient.PublishAsync(command, Guid.NewGuid(), cfg => cfg
                 .WithExchange(exchange => exchange.WithType(ExchangeType.Topic).WithName("servicedesk.statusmanagementsystem.commands"))
