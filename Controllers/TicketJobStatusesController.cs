@@ -38,16 +38,27 @@ namespace servicedesk.api
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Guid ticketId, Guid jobId, [FromBody]SetStatus command)
+        public async Task<IActionResult> Post(Guid ticketId, Guid jobId, [FromBody]Status body)
         {
+            var command = new SetStatus();
+
             command.Request = Coolector.Common.Commands.Request.New<SetStatus>();           
             command.ReferenceId = jobId;
+            command.SourceId = new Guid("b29bdb1f-485d-4721-b905-e8b1f918739a");
+            command.Message = "Manual change status";
+            command.StatusId = body.StatusId;
+            command.UserId = User.Identity.Name;
 
             await _busClient.PublishAsync(command, Guid.NewGuid(), cfg => cfg
                 .WithExchange(exchange => exchange.WithType(ExchangeType.Topic).WithName("servicedesk.statusmanagementsystem.commands"))
                 .WithRoutingKey("setstatus.job"));
 
             return await Task.FromResult(Accepted(command));
+        }
+
+        public class Status
+        {
+            public Guid StatusId { get; set; }
         }
     }
 }
