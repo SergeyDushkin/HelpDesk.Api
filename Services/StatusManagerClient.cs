@@ -24,7 +24,7 @@ namespace servicedesk.api
         {
             var response = await _client.GetAsync($"/sources/{sourceName}/{referenceId}/current");
 
-            if (response.StatusCode == HttpStatusCode.NotFound)
+            if (!response.IsSuccessStatusCode)
                 return default(StatusEventDto);
 
             response.EnsureSuccessStatusCode();
