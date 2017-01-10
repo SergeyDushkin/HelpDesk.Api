@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -23,6 +24,9 @@ namespace servicedesk.api
         {
             var response = await _client.GetAsync($"/sources/{sourceName}/{referenceId}/current");
 
+            if (response.StatusCode == HttpStatusCode.NotFound)
+                return default(StatusEventDto);
+
             response.EnsureSuccessStatusCode();
 
             var json = await response.Content.ReadAsStringAsync();
@@ -34,6 +38,9 @@ namespace servicedesk.api
         public async Task<IEnumerable<StatusDto>> GetNextStatusAsync(string sourceName, Guid referenceId)
         {
             var response = await _client.GetAsync($"/sources/{sourceName}/{referenceId}/next");
+
+            if (response.StatusCode == HttpStatusCode.NotFound)
+                return default(IEnumerable<StatusDto>);
 
             response.EnsureSuccessStatusCode();
 
