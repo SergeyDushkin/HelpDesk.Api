@@ -5,16 +5,19 @@ using Microsoft.Extensions.Logging;
 using RawRabbit;
 using servicedesk.Common.Commands;
 using RawRabbit.Configuration.Exchange;
+using Microsoft.Extensions.Options;
 
 namespace servicedesk.api
 {
     [Route("tickets/{ticketId}/jobs/{jobId}/status")]
     public class TicketJobStatusesController : ControllerBase
     {
+        private readonly StatusManagerConfiguration _configuration;
         private readonly IBusClient _busClient;
 		private readonly ILogger<TicketJobStatusesController> _logger;
-        public TicketJobStatusesController(IBusClient busClient, ILoggerFactory loggerFactory)
+        public TicketJobStatusesController(IOptions<StatusManagerConfiguration> configuration, IBusClient busClient, ILoggerFactory loggerFactory)
         {
+            _configuration = configuration.Value;
             _busClient = busClient;
             _logger = loggerFactory.CreateLogger<TicketJobStatusesController>();
         }
@@ -22,7 +25,7 @@ namespace servicedesk.api
         [HttpGet] //Authorize
         public async Task<IActionResult> Get(Guid ticketId, Guid jobId)
         {
-            var client = new StatusManagerClient("http://localhost:10010");
+            var client = new StatusManagerClient(_configuration.Url);
             var result = await client.GetCurrentStatusAsync("job", jobId);
 
             return Ok(result);
@@ -31,7 +34,7 @@ namespace servicedesk.api
         [HttpGet, Route("next")] //Authorize
         public async Task<IActionResult> GetNext(Guid ticketId, Guid jobId)
         {
-            var client = new StatusManagerClient("http://localhost:10010");
+            var client = new StatusManagerClient(_configuration.Url);
             var result = await client.GetNextStatusAsync("job", jobId);
 
             return Ok(result);
