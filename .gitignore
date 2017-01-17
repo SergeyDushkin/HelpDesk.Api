@@ -64,6 +64,7 @@ bin/*
 npm-debug.log
 testem.log
 /typings
+project.lock.json
 
 # e2e
 /e2e/*.js
