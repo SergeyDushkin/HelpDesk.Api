@@ -31,7 +31,7 @@
 		"RawRabbit.vNext": "1.10.3",
     
     "NETStandard.Library": "1.6.1",
-    "ServiceDesk.Common": "1.0.1"
+    "ServiceDesk.Common": "1.0.*"
   },
   
   "frameworks": {

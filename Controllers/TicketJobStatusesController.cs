@@ -44,15 +44,16 @@ namespace servicedesk.api
         public async Task<IActionResult> Post(Guid ticketId, Guid jobId, [FromBody]Status body)
         {
             var command = new SetStatus();
+            var commandId = Guid.NewGuid();
 
-            command.Request = Coolector.Common.Commands.Request.New<SetStatus>();           
+            command.Request = servicedesk.Common.Commands.Request.Create<SetStatus>(commandId, "servicedesk.api", "ru-ru");            
             command.ReferenceId = jobId;
             command.SourceId = new Guid("b29bdb1f-485d-4721-b905-e8b1f918739a");
             command.Message = "Manual change status";
             command.StatusId = body.StatusId;
             command.UserId = User.Identity.Name ?? "unauthenticated user";
 
-            await _busClient.PublishAsync(command, Guid.NewGuid(), cfg => cfg
+            await _busClient.PublishAsync(command, commandId, cfg => cfg
                 .WithExchange(exchange => exchange.WithType(ExchangeType.Topic).WithName("servicedesk.statusmanagementsystem.commands"))
                 .WithRoutingKey("setstatus.job"));
 
