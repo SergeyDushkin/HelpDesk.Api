@@ -9,5 +9,7 @@ RUN ["dotnet", "publish", "-c", "Release"]
 EXPOSE 5000/tcp
 ENV ASPNETCORE_URLS http://*:5000
 ENV ASPNETCORE_ENVIRONMENT docker
- 
+
+WORKDIR /app/bin/Release/netcoreapp1.1/publish
+
 ENTRYPOINT ["dotnet", "dotnet HelpDesk.Api.dll"]
