@@ -113,7 +113,8 @@ namespace servicedesk.api
                    IssuerSigningKey = new X509SecurityKey(cert), 
                    ValidateIssuerSigningKey = true, 
                    ValidateLifetime = true, 
-                   ClockSkew = TimeSpan.Zero 
+                   ClockSkew = TimeSpan.Zero,
+                   ValidateAudience = false
                 }
             };
 
