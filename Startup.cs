@@ -86,8 +86,7 @@ namespace servicedesk.api
 
             //add NLog.Web
             app.AddNLogWeb();
-
-            env.ConfigureNLog("nlog.config");
+            app.ConfigureNLog("nlog.config");
 
             loggerFactory.AddConsole(LogLevel.Debug);
             loggerFactory.AddDebug();
