@@ -12,4 +12,4 @@ ENV ASPNETCORE_ENVIRONMENT docker
 
 WORKDIR /app/bin/Release/netcoreapp1.1/publish
 
-ENTRYPOINT ["dotnet", "dotnet HelpDesk.Api.dll"]
+ENTRYPOINT ["dotnet", "HelpDesk.Api.dll"]
