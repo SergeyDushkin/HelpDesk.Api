@@ -1,4 +1,4 @@
-FROM microsoft/aspnetcore
+FROM microsoft/dotnet:latest
 COPY . /app
 WORKDIR /app
  
@@ -7,9 +7,9 @@ RUN ["dotnet", "build"]
 RUN ["dotnet", "publish", "-c", "Release"]
  
 EXPOSE 5000/tcp
-ENV ASPNETCORE_URLS http://+:5000
+ENV ASPNETCORE_URLS http://*:5000
 ENV ASPNETCORE_ENVIRONMENT docker
 
 WORKDIR /app/bin/Release/netcoreapp1.1/publish
 
-ENTRYPOINT ["dotnet", "HelpDesk.Api.dll"]
+CMD ["dotnet", "HelpDesk.Api.dll"]
