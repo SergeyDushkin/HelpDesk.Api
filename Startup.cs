@@ -114,6 +114,7 @@ namespace servicedesk.api
                    ValidateIssuerSigningKey = true, 
                    ValidateLifetime = true, 
                    ClockSkew = TimeSpan.Zero,
+                   ValidateIssuer = false,
                    ValidateAudience = false
                 }
             };
