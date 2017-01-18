@@ -9,7 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using NLog.Extensions.Logging;
-using NLog.Web;
 
 using RawRabbit.Attributes;
 using RawRabbit.Common;
@@ -22,7 +21,6 @@ namespace servicedesk.api
     {
         private readonly IHostingEnvironment _environment;
         private readonly IConfigurationRoot _configuration;
-
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
