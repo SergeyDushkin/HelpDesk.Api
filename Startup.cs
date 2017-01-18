@@ -81,7 +81,7 @@ namespace servicedesk.api
 
             //add NLog to ASP.NET Core
             loggerFactory.AddNLog();
-            loggerFactory.ConfigureNLog("nlog.config");
+            //loggerFactory.ConfigureNLog("nlog.config");
 
             loggerFactory.AddConsole(LogLevel.Debug);
             loggerFactory.AddDebug();

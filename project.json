@@ -14,7 +14,6 @@
     "Microsoft.AspNetCore.Hosting": "1.1.0",
     "Microsoft.AspNetCore.Server.Kestrel": "1.1.0",
     "Microsoft.AspNetCore.Owin": "1.1.0",
-    "Microsoft.AspNetCore.Server.IISIntegration": "1.1.0",
     "Microsoft.EntityFrameworkCore": "1.1.0",
     "Microsoft.EntityFrameworkCore.SqlServer": "1.1.0",
     "Microsoft.Extensions.Configuration.Json": "1.1.0",
@@ -53,13 +52,5 @@
           "nlog.config",
           "IdentityHelpDesk.cer"
       ]
-  }, 
-
-  "tools": {
-    "Microsoft.AspNetCore.Server.IISIntegration.Tools": "1.1.0-preview4-final"
-  },
-
-  "scripts": {
-      "postpublish": [ "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%" ]
   }
 }
