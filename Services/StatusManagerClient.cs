@@ -35,9 +35,10 @@ namespace servicedesk.api
             var response = await _client.GetAsync($"/sources/{sourceName}/{referenceId}/current");
 
             if (!response.IsSuccessStatusCode)
-                return default(StatusEventDto);
-
-            response.EnsureSuccessStatusCode();
+                throw new Exception(await response.Content.ReadAsStringAsync());
+                
+            //return default(StatusEventDto);
+            // response.EnsureSuccessStatusCode();
 
             var json = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<StatusEventDto>(json);
@@ -50,10 +51,11 @@ namespace servicedesk.api
             var response = await _client.GetAsync($"/sources/{sourceName}/{referenceId}/next");
 
             if (response.StatusCode == HttpStatusCode.NotFound)
-                return default(IEnumerable<StatusDto>);
-
-            response.EnsureSuccessStatusCode();
-
+                throw new Exception(await response.Content.ReadAsStringAsync());
+                
+            //return default(IEnumerable<StatusDto>);
+            // response.EnsureSuccessStatusCode();
+            
             var json = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<IEnumerable<StatusDto>>(json);
 
