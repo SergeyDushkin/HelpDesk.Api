@@ -40,6 +40,8 @@ namespace servicedesk.api
 
             services.Configure<StatusManagerConfiguration>(_configuration.GetSection("StatusService"));
 
+            services.AddSingleton<IStatusManagerClient, StatusManagerClient>();
+
             services.AddScoped<TicketService>();
             services.AddScoped<ClientService>();
             services.AddScoped<UserService>();
