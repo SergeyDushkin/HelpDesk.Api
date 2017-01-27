@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Coolector.Common.Types;
 using Microsoft.Extensions.Logging;
 using servicedesk.api.Queries;
 using servicedesk.Services.Tickets.Shared.Dto;
@@ -21,7 +20,7 @@ namespace servicedesk.api.Storages
             this.logger.LogDebug("Init ClientsStorage");
         }
 
-        public async Task<Maybe<ClientDto>> GetAsync(Guid id)
+        public async Task<ClientDto> GetAsync(Guid id)
             => await client.GetAsync<ClientDto>($"clients/{id}");
 
         public async Task<IEnumerable<ClientDto>> BrowseAsync(BrowseAll query)

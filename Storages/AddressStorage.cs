@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Coolector.Common.Types;
 using Microsoft.Extensions.Logging;
 using servicedesk.api.Queries;
 using servicedesk.Services.Tickets.Shared.Dto;
@@ -21,7 +20,7 @@ namespace servicedesk.api.Storages
             this.logger.LogDebug("Init AddressStorage");
         }
 
-        public async Task<Maybe<AddressDto>> GetAsync(Guid id)
+        public async Task<AddressDto> GetAsync(Guid id)
             => await client.GetAsync<AddressDto>($"addresses/{id}");
 
         public async Task<IEnumerable<AddressDto>> BrowseAsync(BrowseAll query)

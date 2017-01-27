@@ -5,7 +5,6 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Coolector.Common.Extensions;
-using Coolector.Common.Types;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using servicedesk.Common.Security;
@@ -29,67 +28,45 @@ namespace servicedesk.api.Storages
             this.httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
         }
         
-        public async Task<Maybe<T>> GetAsync<T>(string endpoint) where T : class
+        public async Task<T> GetAsync<T>(string endpoint) where T : class
         {
             logger.LogDebug($"Get data from storage, endpoint: {endpoint}");
             var response = await GetResponseAsync(endpoint);
-            if(response.HasNoValue)
-                return new Maybe<T>();
 
-            var content = await response.Value.Content.ReadAsStringAsync();
+            if (response == null)
+                return default(T);
+
+            var content = await response.Content.ReadAsStringAsync();
             var data = JsonConvert.DeserializeObject<T>(content);
 
             return data;
         }
 
-        /*
-        public async Task<Maybe<PagedResult<T>>> GetCollectionAsync<T>(string endpoint) where T : class
-        {
-            logger.LogDebug($"Get data from storage, endpoint: {String.Concat(BaseAddress, endpoint)}");
-            var response = await GetResponseAsync(endpoint);
-            if (response.HasNoValue)
-                return new Maybe<PagedResult<T>>();
-
-            var content = await response.Value.Content.ReadAsStringAsync();
-            var data = JsonConvert.DeserializeObject<IEnumerable<T>>(content);
-
-            return data.ToPagedResult(response.Value.Headers);
-        }*/
-
         public async Task<IEnumerable<T>> GetCollectionAsync<T>(string endpoint) where T : class
         {
             logger.LogDebug($"Get data from storage, endpoint: {String.Concat(BaseAddress, endpoint)}");
             var response = await GetResponseAsync(endpoint);
-            if (response.HasNoValue)
+
+            if (response == null)
                 return default(IEnumerable<T>);
 
-            var content = await response.Value.Content.ReadAsStringAsync();
+            var content = await response.Content.ReadAsStringAsync();
             var data = JsonConvert.DeserializeObject<IEnumerable<T>>(content);
 
             return data;
         }
 
-        public async Task<Maybe<Stream>> GetStreamAsync(string endpoint)
+        public async Task<Stream> GetStreamAsync(string endpoint)
         {
             logger.LogDebug($"Get stream from endpoint: {endpoint}");
             var response = await GetResponseAsync(endpoint);
-            if (response.HasNoValue)
-                return new Maybe<Stream>();
 
-            return await response.Value.Content.ReadAsStreamAsync();
+            if (response == null)
+                return default(Stream);
+
+            return await response.Content.ReadAsStreamAsync();
         }
 
-        /*
-        async Task<Maybe<PagedResult<TResult>>> IStorageClient.GetFilteredCollectionAsync<TResult, TQuery>(TQuery query, string endpoint)
-        {
-            logger.LogDebug($"Get filtered data from storage, endpoint: {String.Concat(BaseAddress, endpoint)}, queryType: {typeof(TQuery).Name}");
-            var queryString = endpoint.ToQueryString(query);
-            var results = await GetCollectionAsync<TResult>(queryString);
-            if (results.HasNoValue || results.Value.IsEmpty)
-                return PagedResult<TResult>.Empty;
-            return results.Value;
-        }*/
-        
         async Task<IEnumerable<TResult>> IStorageClient.GetFilteredCollectionAsync<TResult, TQuery>(TQuery query, string endpoint)
         {
             logger.LogDebug($"Get filtered data from storage, endpoint: {String.Concat(BaseAddress, endpoint)}, queryType: {typeof(TQuery).Name}");
@@ -99,7 +76,7 @@ namespace servicedesk.api.Storages
             return results;
         }
 
-        private async Task<Maybe<HttpResponseMessage>> GetResponseAsync(string endpoint)
+        private async Task<HttpResponseMessage> GetResponseAsync(string endpoint)
         {
             if (String.IsNullOrEmpty(endpoint))
             {
@@ -127,6 +104,5 @@ namespace servicedesk.api.Storages
 
             return null;
         }
-
     } 
 }
