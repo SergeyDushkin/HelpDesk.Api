@@ -4,9 +4,9 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Coolector.Common.Extensions;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using servicedesk.Common.Extensions;
 using servicedesk.Common.Security;
 
 namespace servicedesk.api.Storages

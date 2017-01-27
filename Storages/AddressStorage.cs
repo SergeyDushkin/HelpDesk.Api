@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using servicedesk.api.Queries;
+using servicedesk.Common.Queries;
 using servicedesk.Services.Tickets.Shared.Dto;
 
 namespace servicedesk.api.Storages
@@ -23,7 +23,7 @@ namespace servicedesk.api.Storages
         public async Task<AddressDto> GetAsync(Guid id)
             => await client.GetAsync<AddressDto>($"addresses/{id}");
 
-        public async Task<IEnumerable<AddressDto>> BrowseAsync(BrowseAll query)
-            => await client.GetFilteredCollectionAsync<AddressDto, BrowseAll>(query, "addresses");
+        public async Task<IEnumerable<AddressDto>> BrowseAsync(GetByReferenceId query)
+            => await client.GetFilteredCollectionAsync<AddressDto, GetByReferenceId>(query, "addresses");
     }
 }

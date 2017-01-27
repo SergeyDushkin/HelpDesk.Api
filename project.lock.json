@@ -2226,7 +2226,7 @@
           }
         }
       },
-      "ServiceDesk.Common/1.0.17": {
+      "ServiceDesk.Common/1.0.20": {
         "type": "package",
         "dependencies": {
           "Autofac": "4.3.0",
@@ -2248,11 +2248,11 @@
           "lib/netstandard1.6/ServiceDesk.Common.dll": {}
         }
       },
-      "ServiceDesk.Services.Tickets.Shared/1.0.7": {
+      "ServiceDesk.Services.Tickets.Shared/1.0.10": {
         "type": "package",
         "dependencies": {
           "NETStandard.Library": "1.6.1",
-          "ServiceDesk.Common": "1.0.16"
+          "ServiceDesk.Common": "1.0.18"
         },
         "compile": {
           "lib/netstandard1.6/ServiceDesk.Services.Tickets.Shared.dll": {}
@@ -6262,22 +6262,22 @@
         "runtimes/win7-x86/native/sni.dll"
       ]
     },
-    "ServiceDesk.Common/1.0.17": {
-      "sha512": "IrEVMahAAwS679Mvsr3h65fQE6fVJx+KFVqYaE9w6TN/G1Snlf8HhuSRhCv+iHY0ETlDDkATuohobegI6P7U4A==",
+    "ServiceDesk.Common/1.0.20": {
+      "sha512": "f/FXZJiQzdFyofRBL8tQVF9J82H1Q9DAcl2Lt6MsjtodSzz8cYTlV/qhgZx8YKwkwkySyfHM4shdU1SIr+F3vw==",
       "type": "package",
-      "path": "ServiceDesk.Common/1.0.17",
+      "path": "ServiceDesk.Common/1.0.20",
       "files": [
-        "ServiceDesk.Common.1.0.17.nupkg.sha512",
+        "ServiceDesk.Common.1.0.20.nupkg.sha512",
         "ServiceDesk.Common.nuspec",
         "lib/netstandard1.6/ServiceDesk.Common.dll"
       ]
     },
-    "ServiceDesk.Services.Tickets.Shared/1.0.7": {
-      "sha512": "n+aY7Un3fxFtCpp5O466e8cSU4PBMQalJZV65ibJYeGQzWBYONZ9PTfxi3pf51a9nSPTgFkooCHGv2gbUajIKA==",
+    "ServiceDesk.Services.Tickets.Shared/1.0.10": {
+      "sha512": "8MH2dmwCW86uvcEqGI9FyC8XxzoRH+ACT0OnIP8f0n3KjvoO6BW5WHX6uBCrOFHkn4/QjR1dxA7Mr4ze/Tj64Q==",
       "type": "package",
-      "path": "ServiceDesk.Services.Tickets.Shared/1.0.7",
+      "path": "ServiceDesk.Services.Tickets.Shared/1.0.10",
       "files": [
-        "ServiceDesk.Services.Tickets.Shared.1.0.7.nupkg.sha512",
+        "ServiceDesk.Services.Tickets.Shared.1.0.10.nupkg.sha512",
         "ServiceDesk.Services.Tickets.Shared.nuspec",
         "lib/netstandard1.6/ServiceDesk.Services.Tickets.Shared.dll"
       ]

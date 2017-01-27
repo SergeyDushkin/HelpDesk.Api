@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using Coolector.Common.Queries;
+using servicedesk.Common.Queries;
 
 namespace servicedesk.api.Storages
 {
