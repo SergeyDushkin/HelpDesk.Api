@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using System;
-using servicedesk.api.Storages;
 using RawRabbit.Extensions.Client;
-using servicedesk.api.Queries;
-using servicedesk.Services.Tickets.Shared.Commands;
 using RawRabbit.Configuration.Exchange;
+using servicedesk.api.Storages;
+using servicedesk.Services.Tickets.Shared.Commands;
+using servicedesk.Common.Queries;
 
 namespace servicedesk.api
 {
@@ -21,7 +21,7 @@ namespace servicedesk.api
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(BrowseAll query)
+        public async Task<IActionResult> Get(GetByReferenceId query)
         {
             var result = await storage.BrowseAsync(query);
             return Ok(result);

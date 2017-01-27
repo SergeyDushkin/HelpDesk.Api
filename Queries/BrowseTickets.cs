@@ -1,4 +1,4 @@
-﻿using Coolector.Common.Types;
+﻿using servicedesk.Common.Types;
 
 namespace servicedesk.api.Queries
 {
