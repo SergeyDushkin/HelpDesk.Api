@@ -26,5 +26,6 @@ namespace servicedesk.api
         public Guid AddressId { get; set; }
         public Guid UserId { get; set; }
         public string Description { get; set; }
+        public DateTimeOffset RequestDate { get; set; }
     }
 }
