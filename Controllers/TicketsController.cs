@@ -2,16 +2,15 @@
 using System.Threading.Tasks;
 using System;
 using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
+using RawRabbit.Extensions.Client;
+using RawRabbit.Configuration.Exchange;
 using servicedesk.api.Storages;
 using servicedesk.api.Queries;
-using RawRabbit.Extensions.Client;
 using servicedesk.Services.Tickets.Shared.Commands;
-using RawRabbit.Configuration.Exchange;
 
 namespace servicedesk.api
 {
-    [Route("[controller]")] //Authorize
+    [Route("[controller]"), Authorize]
     public class TicketsController : ControllerBase
     {
         private readonly ITicketStorage storage;
@@ -57,7 +56,7 @@ namespace servicedesk.api
             await bus.PublishAsync(command, commandId, cfg => cfg
                 .WithExchange(exchange => exchange.WithType(ExchangeType.Topic).WithName("servicedesk.Services.Tickets"))
                 .WithRoutingKey("ticket.create"));
-
+                
             return await Task.FromResult(Accepted(command));
         }
     }
