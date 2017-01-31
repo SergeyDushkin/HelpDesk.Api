@@ -37,10 +37,12 @@ namespace servicedesk.api
         {
             services.AddDbContext<HelpDeskDbContext>(options => options.UseSqlServer(_configuration.GetConnectionString("HelpDeskDatabase")));
             services.AddDbContext<ContentDbContext>(options => options.UseSqlServer(_configuration.GetConnectionString("ContentDatabase")));
-
+                
             services.Configure<StatusManagerConfiguration>(_configuration.GetSection("StatusService"));
-
             services.AddSingleton<IStatusManagerClient, StatusManagerClient>();
+
+            services.Configure<SettingsConfiguration>(_configuration.GetSection("SettingsService"));
+            services.AddSingleton<SettingsService>();            
 
             services.AddScoped<TicketService>();
             services.AddScoped<ClientService>();
