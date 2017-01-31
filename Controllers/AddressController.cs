@@ -2,30 +2,38 @@
 using System.Threading.Tasks;
 using System;
 using Microsoft.AspNetCore.Authorization;
+using servicedesk.api.Storages;
+using servicedesk.Services.Tickets.Shared.Commands;
+using RawRabbit.Extensions.Client;
+using RawRabbit.Configuration.Exchange;
+using servicedesk.Common.Queries;
 
 namespace servicedesk.api
 {
-    [Route("clients/{clientId}/[controller]")]
+    [Route("clients/{referenceId}/[controller]"), Authorize]
     public class AddressController : ControllerBase
     {
-        private readonly AddressService service;
-        public AddressController(AddressService service)
+        private readonly IAddressStorage storage;
+        private readonly IBusClient bus;
+        public AddressController(IAddressStorage storage, IBusClient busClient)
         {
-            this.service = service;
+            this.storage = storage;
+            this.bus = busClient;
         }
 
-        [HttpGet, Authorize]
-        public async Task<IActionResult> GetByClientId(Guid clientId)
-        {
-            var query = await this.service.GetAsync(clientId);
-            return Ok(query);
+        [HttpGet]
+        public async Task<IActionResult> GetByClientId(Guid referenceId) 
+        { 
+            var result = await storage.BrowseAsync(new GetByReferenceId { ReferenceId = referenceId });
+            return Ok(result);
         }
+
 
         [Route("{id}")]
-        [HttpGet, Authorize]
-        public async Task<IActionResult> GetById(Guid clientId, Guid id)
+        [HttpGet]
+        public async Task<IActionResult> GetById(Guid referenceId, Guid id)
         {
-            var record = await this.service.GetByIdAsync(clientId, id);
+            var record = await storage.GetAsync(id);
 
             if (record == null)
             {
@@ -36,10 +44,10 @@ namespace servicedesk.api
         }
 
         [Route("{id}")]
-        [HttpPut, Authorize]
-        public async Task<IActionResult> Put(Guid clientId, Guid id, [FromBody]Address address)
+        [HttpPut]
+        public async Task<IActionResult> Put(Guid referenceId, Guid id, [FromBody]Address address)
         {
-            var record = await this.service.GetByIdAsync(clientId, id);
+            var record = await storage.GetAsync(id);
 
             if (record == null)
             {
@@ -51,27 +59,42 @@ namespace servicedesk.api
             //return NoContent();
         }
 
-        [HttpPost, Authorize]
-        public async Task<IActionResult> Post(Guid clientId, [FromBody]AddressCreated created)
+        [HttpPost]
+        public async Task<IActionResult> Post(Guid referenceId, [FromBody]AddressCreated created)
         {
-            var user = await service.CreateAsync(clientId, created);
-            return Created(user.Id.ToString(), user);
+            var commandId = Guid.NewGuid();
+            
+            var command = new CreateAddress 
+            {
+                Request  = servicedesk.Common.Commands.Request.Create<CreateAddress>(commandId, "servicedesk.Services.Tickets", "ru-ru"),
+                ReferenceId = referenceId,
+                Name = created.Name,
+                Address = created.Address,
+                UserId =  User.Identity.Name ?? "unauthenticated user"
+            };
+
+            await bus.PublishAsync(command, commandId, cfg => cfg
+                .WithExchange(exchange => exchange.WithType(ExchangeType.Topic).WithName("servicedesk.Services.Tickets"))
+                .WithRoutingKey("address.create"));
+
+            return await Task.FromResult(Accepted(command));
         }
 
         [Route("{id}")]
-        [HttpDelete, Authorize]
-        public async Task<IActionResult> Delete(Guid clientId, Guid id)
+        [HttpDelete]
+        public async Task<IActionResult> Delete(Guid referenceId, Guid id)
         {
-            var deleted = await this.service.GetByIdAsync(clientId, id);
+            var record = await storage.GetAsync(id);
 
-            if (deleted == null)
+            if (record == null)
             {
                 return NotFound();
             }
 
-            await service.DeleteAsync(deleted);
+            throw new NotImplementedException();
 
-            return NoContent();
+            //await service.DeleteAsync(deleted);
+            //return NoContent();
         }
     }
 }

@@ -14,6 +14,7 @@ using RawRabbit.Attributes;
 using RawRabbit.Common;
 using RawRabbit.Extensions.Client;
 using RawRabbit.vNext.Logging;
+using servicedesk.api.Storages;
 
 namespace servicedesk.api
 {
@@ -39,10 +40,27 @@ namespace servicedesk.api
             services.AddDbContext<ContentDbContext>(options => options.UseSqlServer(_configuration.GetConnectionString("ContentDatabase")));
                 
             services.Configure<StatusManagerConfiguration>(_configuration.GetSection("StatusService"));
+
             services.AddSingleton<IStatusManagerClient, StatusManagerClient>();
 
             services.Configure<SettingsConfiguration>(_configuration.GetSection("SettingsService"));
             services.AddSingleton<SettingsService>();            
+
+
+            services.AddConfiguration(_configuration.GetSection("TicketService"), () => new ApplicationServiceSettings<TicketStorage>());
+            services.AddConfiguration(_configuration.GetSection("AddressService"), () => new ApplicationServiceSettings<AddressStorage>());
+            services.AddConfiguration(_configuration.GetSection("ClientService"), () => new ApplicationServiceSettings<ClientStorage>());
+
+            services.AddSingleton<IStatusManagerClient, StatusManagerClient>();
+
+            services.AddSingleton<IStorageClient, StorageClient<TicketStorage>>();
+            services.AddSingleton<IStorageClient, StorageClient<AddressStorage>>();
+            services.AddSingleton<IStorageClient, StorageClient<ClientStorage>>();
+
+            services.AddSingleton<ITicketStorage, TicketStorage>();
+            services.AddSingleton<IAddressStorage, AddressStorage>();
+            services.AddSingleton<IClientStorage, ClientStorage>();
+
 
             services.AddScoped<TicketService>();
             services.AddScoped<ClientService>();

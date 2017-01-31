@@ -30,7 +30,9 @@
 		"RawRabbit.vNext": "1.10.3",
     
     "NETStandard.Library": "1.6.1",
-    "ServiceDesk.Common": "1.0.*"
+    "Coolector.Common": "1.0.*",
+    "ServiceDesk.Common": "1.0.*",
+    "ServiceDesk.Services.Tickets.Shared": "1.0.*"
   },
   
   "frameworks": {

@@ -2,45 +2,62 @@
 using System.Threading.Tasks;
 using System;
 using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
+using RawRabbit.Extensions.Client;
+using RawRabbit.Configuration.Exchange;
+using servicedesk.api.Storages;
+using servicedesk.api.Queries;
+using servicedesk.Services.Tickets.Shared.Commands;
 
 namespace servicedesk.api
 {
     [Route("[controller]"), Authorize]
     public class TicketsController : ControllerBase
     {
-        private readonly TicketService service;
-        public TicketsController(TicketService service)
+        private readonly ITicketStorage storage;
+        private readonly IBusClient bus;
+        public TicketsController(ITicketStorage storage, IBusClient busClient)
         {
-            this.service = service;
+            this.storage = storage;
+            this.bus = busClient;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            var query = await this.service.GetAsync();
-            return Ok(query);
-        }
+        public async Task<IActionResult> Get(BrowseTickets query) => Ok(await storage.BrowseAsync(query));
 
         [Route("{id}")]
         [HttpGet]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var record = await this.service.GetByIdAsync(id);
+            var result = await storage.GetAsync(id);
 
-            if (record == null)
+            if (result == null)
             {
                 return NotFound();
             }
 
-            return Ok(record);
+            return Ok(result);
         }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]TicketCreated created) 
         {
-            await this.service.CreateAsync(created, (ClaimsIdentity)User.Identity);
-            return Accepted();
+            var commandId = Guid.NewGuid();
+            
+            var command = new CreateTicket 
+            {
+                Request  = servicedesk.Common.Commands.Request.Create<CreateTicket>(commandId, "servicedesk.Services.Tickets", "ru-ru"),
+                AddressId = created.AddressId,
+                ClientId = created.ClientId,
+                Description = created.Description,
+                RequestDate = created.RequestDate,
+                UserId =  User.Identity.Name ?? "unauthenticated user"
+            };
+
+            await bus.PublishAsync(command, commandId, cfg => cfg
+                .WithExchange(exchange => exchange.WithType(ExchangeType.Topic).WithName("servicedesk.Services.Tickets"))
+                .WithRoutingKey("ticket.create"));
+                
+            return await Task.FromResult(Accepted(command));
         }
     }
 }
