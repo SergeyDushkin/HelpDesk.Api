@@ -49,17 +49,14 @@ namespace servicedesk.api
 
             services.AddConfiguration(_configuration.GetSection("TicketService"), () => new ApplicationServiceSettings<TicketStorage>());
             services.AddConfiguration(_configuration.GetSection("AddressService"), () => new ApplicationServiceSettings<AddressStorage>());
-            services.AddConfiguration(_configuration.GetSection("ClientService"), () => new ApplicationServiceSettings<ClientStorage>());
 
             services.AddSingleton<IStatusManagerClient, StatusManagerClient>();
 
             services.AddSingleton<IStorageClient, StorageClient<TicketStorage>>();
             services.AddSingleton<IStorageClient, StorageClient<AddressStorage>>();
-            services.AddSingleton<IStorageClient, StorageClient<ClientStorage>>();
 
             services.AddSingleton<ITicketStorage, TicketStorage>();
             services.AddSingleton<IAddressStorage, AddressStorage>();
-            services.AddSingleton<IClientStorage, ClientStorage>();
 
 
             services.AddScoped<TicketService>();

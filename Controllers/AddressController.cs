@@ -60,7 +60,7 @@ namespace servicedesk.api
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Guid referenceId, [FromBody]AddressCreated created)
+        public Task<IActionResult> Post(Guid referenceId, [FromBody]AddressCreated created)
         {
             throw new NotImplementedException();
             

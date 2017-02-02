@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using servicedesk.Common.Queries;
 using servicedesk.Services.Tickets.Shared.Dto;
-
+/*
 namespace servicedesk.api.Storages
 {
     public class ClientStorage : IClientStorage
@@ -26,4 +26,4 @@ namespace servicedesk.api.Storages
         public async Task<IEnumerable<ClientDto>> BrowseAsync(GetByReferenceId query)
             => await client.GetFilteredCollectionAsync<ClientDto, GetByReferenceId>(query, "clients");
     }
-}
+}*/
