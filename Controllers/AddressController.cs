@@ -62,22 +62,24 @@ namespace servicedesk.api
         [HttpPost]
         public async Task<IActionResult> Post(Guid referenceId, [FromBody]AddressCreated created)
         {
-            var commandId = Guid.NewGuid();
+            throw new NotImplementedException();
             
-            var command = new CreateAddress 
-            {
-                Request  = servicedesk.Common.Commands.Request.Create<CreateAddress>(commandId, "servicedesk.Services.Tickets", "ru-ru"),
-                ReferenceId = referenceId,
-                Name = created.Name,
-                Address = created.Address,
-                UserId =  User.Identity.Name ?? "unauthenticated user"
-            };
+            //var commandId = Guid.NewGuid();
+            
+            //var command = new CreateAddress 
+            //{
+            //    Request  = servicedesk.Common.Commands.Request.Create<CreateAddress>(commandId, "servicedesk.Services.Tickets", "ru-ru"),
+            //    ReferenceId = referenceId,
+            //    Name = created.Name,
+            //    Address = created.Address,
+            //    UserId =  User.Identity.Name ?? "unauthenticated user"
+            //};
 
-            await bus.PublishAsync(command, commandId, cfg => cfg
-                .WithExchange(exchange => exchange.WithType(ExchangeType.Topic).WithName("servicedesk.Services.Tickets"))
-                .WithRoutingKey("address.create"));
+            //await bus.PublishAsync(command, commandId, cfg => cfg
+            //    .WithExchange(exchange => exchange.WithType(ExchangeType.Topic).WithName("servicedesk.Services.Tickets"))
+            //    .WithRoutingKey("address.create"));
 
-            return await Task.FromResult(Accepted(command));
+            //return await Task.FromResult(Accepted(command));
         }
 
         [Route("{id}")]
