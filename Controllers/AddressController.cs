@@ -3,9 +3,7 @@ using System.Threading.Tasks;
 using System;
 using Microsoft.AspNetCore.Authorization;
 using servicedesk.api.Storages;
-using servicedesk.Services.Tickets.Shared.Commands;
 using RawRabbit.Extensions.Client;
-using RawRabbit.Configuration.Exchange;
 using servicedesk.Common.Queries;
 
 namespace servicedesk.api
