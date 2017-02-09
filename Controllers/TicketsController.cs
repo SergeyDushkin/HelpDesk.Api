@@ -48,6 +48,7 @@ namespace servicedesk.api
                 Request  = servicedesk.Common.Commands.Request.Create<CreateTicket>(commandId, "servicedesk.Services.Tickets", "ru-ru"),
 
                 ClientId = create.ClientId,
+                ApplicantId = create.ApplicantId,
                 AddressId = create.AddressId,
                 ContractId = create.ContractId,
                 Description = create.Description,
