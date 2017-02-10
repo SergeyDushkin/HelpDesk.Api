@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Options;
+using System.Linq;
 
 namespace servicedesk.api
 {
@@ -56,7 +57,7 @@ namespace servicedesk.api
         {
             _logger.LogInformation("Get setting by code {0}", code);
 
-            var response = await _client.GetAsync("/v1/kv/test");
+            var response = await _client.GetAsync("/v1/kv/"+code);
 
            _logger.LogInformation($"/v1/kv/{0}", code);
 
@@ -72,8 +73,8 @@ namespace servicedesk.api
             var result (JsonConvert.DeserializeObject<Setting>(json);
             */
             var json = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<Setting>(json);
-
+            var result = JsonConvert.DeserializeObject<Setting[]>(json).SingleOrDefault();
+			
 
             return result;
         
