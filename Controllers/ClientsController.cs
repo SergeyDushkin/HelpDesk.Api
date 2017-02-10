@@ -6,7 +6,7 @@ using RawRabbit.Configuration.Exchange;
 using servicedesk.api.Storages;
 using servicedesk.Services.Tickets.Shared.Commands;
 using servicedesk.Common.Queries;
-
+/*
 namespace servicedesk.api
 {
     [Route("[controller]")]
@@ -61,3 +61,4 @@ namespace servicedesk.api
         }
     }
 }
+*/

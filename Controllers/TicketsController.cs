@@ -39,18 +39,26 @@ namespace servicedesk.api
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]TicketCreated created) 
+        public async Task<IActionResult> Post([FromBody]CreateTicket create) 
         {
             var commandId = Guid.NewGuid();
             
             var command = new CreateTicket 
             {
                 Request  = servicedesk.Common.Commands.Request.Create<CreateTicket>(commandId, "servicedesk.Services.Tickets", "ru-ru"),
-                AddressId = created.AddressId,
-                ClientId = created.ClientId,
-                Description = created.Description,
-                RequestDate = created.RequestDate,
-                UserId =  User.Identity.Name ?? "unauthenticated user"
+
+                ClientId = create.ClientId,
+                ApplicantId = create.ApplicantId,
+                AddressId = create.AddressId,
+                ContractId = create.ContractId,
+                Description = create.Description,
+                BusinessUnitId = create.BusinessUnitId,
+                OperatorId = create.OperatorId,
+                PriorityId = create.PriorityId,
+                ServiceId = create.ServiceId,
+                StartDate = create.StartDate,
+                StatusId = create.StatusId,
+                UserId = User.Identity.Name ?? "unauthenticated user"
             };
 
             await bus.PublishAsync(command, commandId, cfg => cfg

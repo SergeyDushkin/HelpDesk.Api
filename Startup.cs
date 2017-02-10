@@ -8,12 +8,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using NLog.Extensions.Logging;
 
 using RawRabbit.Attributes;
 using RawRabbit.Common;
 using RawRabbit.Extensions.Client;
 using RawRabbit.vNext.Logging;
+using Serilog;
 using servicedesk.api.Storages;
 
 namespace servicedesk.api
@@ -49,17 +49,14 @@ namespace servicedesk.api
 
             services.AddConfiguration(_configuration.GetSection("TicketService"), () => new ApplicationServiceSettings<TicketStorage>());
             services.AddConfiguration(_configuration.GetSection("AddressService"), () => new ApplicationServiceSettings<AddressStorage>());
-            services.AddConfiguration(_configuration.GetSection("ClientService"), () => new ApplicationServiceSettings<ClientStorage>());
 
             services.AddSingleton<IStatusManagerClient, StatusManagerClient>();
 
             services.AddSingleton<IStorageClient, StorageClient<TicketStorage>>();
             services.AddSingleton<IStorageClient, StorageClient<AddressStorage>>();
-            services.AddSingleton<IStorageClient, StorageClient<ClientStorage>>();
 
             services.AddSingleton<ITicketStorage, TicketStorage>();
             services.AddSingleton<IAddressStorage, AddressStorage>();
-            services.AddSingleton<IClientStorage, ClientStorage>();
 
 
             services.AddScoped<TicketService>();
@@ -101,10 +98,12 @@ namespace servicedesk.api
 
             app.UseCors("corsGlobalPolicy");
 
-            //add NLog to ASP.NET Core
-            loggerFactory.AddNLog();
-            //loggerFactory.ConfigureNLog("nlog.config");
+            var serilogLogger = new LoggerConfiguration()
+                .Enrich.WithProperty("Application","ServiceDesk.Services.Tickets")
+                .ReadFrom.Configuration(_configuration)
+                .CreateLogger();
 
+            loggerFactory.AddSerilog(serilogLogger);
             loggerFactory.AddConsole(LogLevel.Debug);
             loggerFactory.AddDebug();
             
