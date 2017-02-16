@@ -15,6 +15,7 @@ using RawRabbit.Extensions.Client;
 using RawRabbit.vNext.Logging;
 using Serilog;
 using servicedesk.api.Storages;
+using Consul;
 
 namespace servicedesk.api
 {
@@ -44,11 +45,14 @@ namespace servicedesk.api
             services.AddSingleton<IStatusManagerClient, StatusManagerClient>();
 
             services.Configure<SettingsConfiguration>(_configuration.GetSection("SettingsService"));
-            services.AddSingleton<SettingsService>();            
+            services.AddSingleton<SettingsService>();
 
+            services.AddSingleton<ConsulClient>();
 
             services.AddConfiguration(_configuration.GetSection("TicketService"), () => new ApplicationServiceSettings<TicketStorage>());
             services.AddConfiguration(_configuration.GetSection("AddressService"), () => new ApplicationServiceSettings<AddressStorage>());
+
+            services.AddConfiguration(_configuration.GetSection("SettingsService"), () => new ConsulClient<AddressStorage>());
 
             services.AddSingleton<IStatusManagerClient, StatusManagerClient>();
 

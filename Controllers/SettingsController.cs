@@ -14,19 +14,12 @@ namespace servicedesk.api
         {
             this.service = service;
         }
-/*
-        [HttpGet, Authorize]
-        public async Task<IActionResult> Get()
-        {
-            var query = await this.service.GetAsync();
-            return Ok(query);
-        }
-*/
+
         [Route("{code}")]
         [HttpGet]
         public async Task<IActionResult> GetByCode(string code)
         {
-            var record = await this.service.GetByCodeAsync(code);
+            var record = await this.service.GetByCodeAsync<SMTPSettings>(code);
 
             if (record == null)
             {
@@ -35,46 +28,16 @@ namespace servicedesk.api
 
             return Ok(record);
         }
-/*
-        [Route("{id}")]
-        [HttpPut, Authorize]
-        public async Task<IActionResult> Put(Guid id, [FromBody]Supplier supplier)
+
+        [Route("smtp")]
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody]SMTPSettings value)
         {
-            var record = await this.service.GetByIdAsync(id);
-
-            if (record == null)
-            {
-                return NotFound();
-            }
-
-            await service.UpdateNameAsync(id, supplier.Name);
-
-            return NoContent();
+            await this.service.SetByCodeAsync("smtp", value);
+            return Ok();
         }
 
-        [HttpPost, Authorize]
-        public async Task<IActionResult> Post([FromBody]ServiceCreated created)
-        {
-            var supplier = await service.CreateAsync(created);
-            return Created(supplier.Id.ToString(), supplier);
-        }
-
-        [Route("{id}")]
-        [HttpDelete, Authorize]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            var deleted = await this.service.GetByIdAsync(id);
-
-            if (deleted == null)
-            {
-                return NotFound();
-            }
-
-            await service.DeleteAsync(id);
-
-            return NoContent();
-        }
-        */
+       
     }
-    
+
 }

@@ -19,6 +19,11 @@ namespace servicedesk.api
 
 	}
 
+    public class SMTPSettings {
+        public string Server { get; set; }
+        public string Port { get; set; }
+    }
+
 
 
 }
