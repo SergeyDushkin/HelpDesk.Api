@@ -10,6 +10,7 @@ namespace servicedesk.api
    public class SettingsController : ControllerBase
    {
         private readonly SettingsService service;
+
         public SettingsController(SettingsService service)
         {
             this.service = service;

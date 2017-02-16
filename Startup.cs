@@ -41,18 +41,20 @@ namespace servicedesk.api
             services.AddDbContext<ContentDbContext>(options => options.UseSqlServer(_configuration.GetConnectionString("ContentDatabase")));
                 
             services.Configure<StatusManagerConfiguration>(_configuration.GetSection("StatusService"));
-
             services.AddSingleton<IStatusManagerClient, StatusManagerClient>();
 
-            services.Configure<SettingsConfiguration>(_configuration.GetSection("SettingsService"));
+            //добавляем единственный экземпляр (Singleton) consul сервиса IConsulClient при помощи  инициации конкретного объекта ConsulClient
+            //в конструкторе которого задаем анон. функцию, ConsulClient в части Url из настроечного файла. 
+            services.AddSingleton<IConsulClient>(
+                new ConsulClient (
+                    x => { x.Address = new Uri(_configuration.GetSection("SettingsService").Get<SettingsConfiguration>().Url); }
+                    ));
             services.AddSingleton<SettingsService>();
 
-            services.AddSingleton<ConsulClient>();
 
             services.AddConfiguration(_configuration.GetSection("TicketService"), () => new ApplicationServiceSettings<TicketStorage>());
             services.AddConfiguration(_configuration.GetSection("AddressService"), () => new ApplicationServiceSettings<AddressStorage>());
 
-            services.AddConfiguration(_configuration.GetSection("SettingsService"), () => new ConsulClient<AddressStorage>());
 
             services.AddSingleton<IStatusManagerClient, StatusManagerClient>();
 
@@ -78,12 +80,12 @@ namespace servicedesk.api
                 policy.AllowAnyOrigin();
                 policy.AllowCredentials();
             }));
-            
+            /* 
             services.AddAuthentication();
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("user", policy => policy.RequireClaim("role", "OPERATOR"));
-            });
+            });*/
 
             
 			services
@@ -108,14 +110,14 @@ namespace servicedesk.api
                 .CreateLogger();
 
             loggerFactory.AddSerilog(serilogLogger);
-            loggerFactory.AddConsole(LogLevel.Debug);
+            loggerFactory.AddConsole(Microsoft.Extensions.Logging.LogLevel.Debug);
             loggerFactory.AddDebug();
             
             if (env.IsDevelopment())
             { 
                 app.UseDeveloperExceptionPage();
             }
-            
+              /*
             var cert = new X509Certificate2(Path.Combine(_environment.ContentRootPath, 
                 _configuration.GetSection("Authentication:Certificate").Value), _configuration.GetSection("Authentication:CertificatePassword").Value);
 
@@ -137,11 +139,11 @@ namespace servicedesk.api
                    ValidateAudience = false
                 }
             };
+            app.UseJwtBearerAuthentication(options);
 
+  */
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
             app.UseSecureLinkMiddleware();
-
-            app.UseJwtBearerAuthentication(options);
 
             app.UseMvc();
         }

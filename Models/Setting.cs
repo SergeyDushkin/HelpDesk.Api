@@ -3,6 +3,7 @@ using System;
 
 namespace servicedesk.api
 {
+    /*
     public class Setting
     {
         public string Key { get; set; }
@@ -18,12 +19,12 @@ namespace servicedesk.api
 		}
 
 	}
+    */
 
     public class SMTPSettings {
         public string Server { get; set; }
         public string Port { get; set; }
     }
 
-
-
+    
 }
