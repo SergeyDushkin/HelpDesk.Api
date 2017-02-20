@@ -2,7 +2,6 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Microsoft.Extensions.Options;
 using Consul;
 using System.Text;
 
@@ -20,9 +19,8 @@ namespace servicedesk.api
 
             this._consuleclient = consuleclient;
         }
-   
 
-        // Метод извлекает значение их хранилища по коду
+        // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ
         public async Task<T> GetByCodeAsync<T>(string code)
         {
             _logger.LogInformation("Get setting by code {0}", code);
@@ -38,7 +36,7 @@ namespace servicedesk.api
             return default(T);
         }
 
-        // Метод устанавливает значение в хранилище по коду
+        // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ
         public async Task SetByCodeAsync<T>(string code, T value)
         {
             _logger.LogInformation("Set setting by code {0}", code);
@@ -52,12 +50,6 @@ namespace servicedesk.api
 
              if (!putAttempt.Response)
                 throw new Exception("Response result error");
-       
-
-}
-
-       
-    }
-
-  
+        }       
+    }  
 }

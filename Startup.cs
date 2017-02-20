@@ -51,7 +51,6 @@ namespace servicedesk.api
                     ));
             services.AddSingleton<SettingsService>();
 
-
             services.AddConfiguration(_configuration.GetSection("TicketService"), () => new ApplicationServiceSettings<TicketStorage>());
             services.AddConfiguration(_configuration.GetSection("AddressService"), () => new ApplicationServiceSettings<AddressStorage>());
 
@@ -63,7 +62,6 @@ namespace servicedesk.api
 
             services.AddSingleton<ITicketStorage, TicketStorage>();
             services.AddSingleton<IAddressStorage, AddressStorage>();
-
 
             services.AddScoped<TicketService>();
             services.AddScoped<ClientService>();
@@ -80,14 +78,13 @@ namespace servicedesk.api
                 policy.AllowAnyOrigin();
                 policy.AllowCredentials();
             }));
-            /* 
+
             services.AddAuthentication();
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("user", policy => policy.RequireClaim("role", "OPERATOR"));
-            });*/
+            });
 
-            
 			services
 				.AddRawRabbit(
 					_configuration.GetSection("RawRabbit"),
@@ -117,7 +114,7 @@ namespace servicedesk.api
             { 
                 app.UseDeveloperExceptionPage();
             }
-              /*
+
             var cert = new X509Certificate2(Path.Combine(_environment.ContentRootPath, 
                 _configuration.GetSection("Authentication:Certificate").Value), _configuration.GetSection("Authentication:CertificatePassword").Value);
 
@@ -139,9 +136,8 @@ namespace servicedesk.api
                    ValidateAudience = false
                 }
             };
-            app.UseJwtBearerAuthentication(options);
 
-  */
+            app.UseJwtBearerAuthentication(options);
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
             app.UseSecureLinkMiddleware();
 
